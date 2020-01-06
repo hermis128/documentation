@@ -3161,8 +3161,65 @@ TYPE a, b, c;
 </ul>
 <h1 id="enumeration">Enumeration</h1>
 <ul>
-<li><a href="https://www.geeksforgeeks.org/enumeration-enum-c/">*geeksforgeeks</a></li>
-<li>It is mainly used to assign names to integral constants, the names make a program easy to read and maintain.</li>
+<li>
+<p><a href="https://www.geeksforgeeks.org/enumeration-enum-c/">*geeksforgeeks</a></p>
+</li>
+<li>
+<p><code>enum</code> is a user-defined <em>data type</em> in C.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">enum</span> __ENUM {
+    A,
+    B
+} ENUM;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    ENUM e;
+    e = A;
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, e); <span class="hljs-comment">// This gives 0.</span>
+    e = B;
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, e); <span class="hljs-comment">// This gives 1.</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</div></code></pre>
+</li>
+<li>
+<p>It is mainly used to assign names to integral constants, the names make a program easy to read and maintain. For example,</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">enum</span> __Status {
+    STATUS_OK,
+    STATUS_ERROR
+} Status;
+
+<span class="hljs-function">Status <span class="hljs-title">fcn</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span> </span>{
+    <span class="hljs-keyword">if</span> (x == <span class="hljs-number">0</span>) {
+        <span class="hljs-keyword">return</span> STATUS_OK;
+    }
+    <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">return</span> STATUS_ERROR;
+    }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">int</span> x = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">if</span> (fcn(x) == STATUS_OK) {
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"OK\n"</span>); <span class="hljs-comment">// This will be executed.</span>
+    }
+    <span class="hljs-keyword">else</span> {
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"ERROR\n"</span>);
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</div></code></pre>
+</li>
+<li>
+<p>The members of <code>enum</code> are called <em>enumerators</em>. The enumerators behave as if they are macros that have a data type.</p>
+</li>
+<li>
+<p>The value of enumerators can be assigned by a user.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">enum</span> __ENUM {
+    A = <span class="hljs-number">0x00</span>U,
+    B = <span class="hljs-number">0x01</span>U
+} ENUM;
+</div></code></pre>
+</li>
 </ul>
 <h1 id="type-casting">Type Casting</h1>
 <ul>
