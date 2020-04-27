@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>gazebo_px4.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/*
+
+Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #F0F0F0;
+}
+
+
+/* Base color: saturation 0; */
+
+.hljs,
+.hljs-subst {
+  color: #444;
+}
+
+.hljs-comment {
+  color: #888888;
+}
+
+.hljs-keyword,
+.hljs-attribute,
+.hljs-selector-tag,
+.hljs-meta-keyword,
+.hljs-doctag,
+.hljs-name {
+  font-weight: bold;
+}
+
+
+/* User color: hue: 0 */
+
+.hljs-type,
+.hljs-string,
+.hljs-number,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-quote,
+.hljs-template-tag,
+.hljs-deletion {
+  color: #880000;
+}
+
+.hljs-title,
+.hljs-section {
+  color: #880000;
+  font-weight: bold;
+}
+
+.hljs-regexp,
+.hljs-symbol,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-link,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+  color: #BC6060;
+}
+
+
+/* Language color: hue: 90; */
+
+.hljs-literal {
+  color: #78A960;
+}
+
+.hljs-built_in,
+.hljs-bullet,
+.hljs-code,
+.hljs-addition {
+  color: #397300;
+}
+
+
+/* Meta color: hue: 200 */
+
+.hljs-meta {
+  color: #1f7199;
+}
+
+.hljs-meta-string {
+  color: #4d99bf;
+}
+
+
+/* Misc effects */
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="gazebo---px4">Gazebo - PX4</h1>
+<h1 id="prerequisites">Prerequisites</h1>
+<h2 id="system-update">System update</h2>
+<ul>
+<li>
+<p>Open Terminal and type</p>
+<pre class="hljs"><code><div>sudo apt update &amp;&amp; sudo apt upgrade -y
+</div></code></pre>
+</li>
+</ul>
+<h2 id="installing-git">Installing Git</h2>
+<ul>
+<li>
+<p>Open Terminal and type</p>
+<pre class="hljs"><code><div>sudo apt install git-all -y
+</div></code></pre>
+</li>
+</ul>
+<h1 id="installations">Installations</h1>
+<h2 id="px4-firmware">PX4 firmware</h2>
+<h3 id="downloading">Downloading</h3>
+<ul>
+<li>
+<p><a href="https://dev.px4.io/master/en/setup/building_px4.html#get_px4_code">*px4</a></p>
+</li>
+<li>
+<p>Open Terminal and type</p>
+<pre class="hljs"><code><div>git clone https://github.com/PX4/Firmware.git --recursive
+</div></code></pre>
+</li>
+<li>
+<p>This will generate the <em>\Firmware</em> directory in the <em>\home</em> directory.</p>
+</li>
+</ul>
+<h3 id="installation">Installation</h3>
+<ul>
+<li>
+<p>Run the following script to completely set up a development environment including  <em>Gazebo 9</em> and <em>jMAVSim</em> simulators, and/or the <em>NuttX/Pixhawk</em> toolchain:</p>
+<pre class="hljs"><code><div>bash ./Tools/setup/ubuntu.sh
+</div></code></pre>
+<p>and restart the computer.</p>
+</li>
+</ul>
+<h2 id="qgroundcontrol">QGroundControl</h2>
+<ul>
+<li><a href="https://docs.qgroundcontrol.com/en/getting_started/download_and_install.html">*qgroundcontrol</a></li>
+</ul>
+<h3 id="downloading">Downloading</h3>
+<ul>
+<li>Before installing QGroundControl for the first time:
+<ol>
+<li>
+<p>On the command prompt enter:</p>
+<pre class="hljs"><code><div>sudo usermod -a -G dialout $USER
+sudo apt-get remove modemmanager -y
+sudo apt install gstreamer1.0-plugins-bad gstreamer1.0-libav -y
+</div></code></pre>
+</li>
+<li>
+<p>Logout and login again to enable the change to user permissions.</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="installation">Installation</h3>
+<ul>
+<li>To install QGroundControl:
+<ol>
+<li>
+<p>Download <em>QGroundControl.AppImage</em> from <a href="https://s3-us-west-2.amazonaws.com/qgroundcontrol/latest/QGroundControl.AppImage">*amazonaws</a>.</p>
+</li>
+<li>
+<p>Go to the download directory and install using the terminal commands:</p>
+<pre class="hljs"><code><div>chmod +x ./QGroundControl.AppImage
+</div></code></pre>
+</li>
+</ol>
+</li>
+</ul>
+<h1 id="running-the-code">Running the Code</h1>
+<h2 id="building-px4">Building PX4</h2>
+<ul>
+<li>
+<p>In Terminal, change the current path to <em>\Firmware</em> and type</p>
+<pre class="hljs"><code><div>make px4_sitl gazebo
+</div></code></pre>
+<p>This will build and launch PX4.</p>
+</li>
+</ul>
+<h2 id="connecting-to-qgroundcontrol">Connecting to QGroundControl</h2>
+<ul>
+<li>
+<p>When QGroundControl is launched, PX4 and QGroundControl will be automatically connected via MAVLink.</p>
+</li>
+<li>
+<p>To launch QGroundControl, go to the directory containing <em>QGroundControl.AppImage</em> and double-click it. It can also be launched in Terminal:</p>
+<pre class="hljs"><code><div>./QGroundControl.AppImage
+</div></code></pre>
+</li>
+</ul>
+<h1 id="troubleshooting">Troubleshooting</h1>
+<h2 id="vmware">VMWare</h2>
+<h3 id="vmwioctlcommand-error"><em>vmw_ioctl_command</em> error</h3>
+<ul>
+<li>
+<p>VMWare does not support <em>OpenGL</em> 3. By setting <em>OpenGL</em> 2 as a default graphics library.</p>
+</li>
+<li>
+<p>In Terminal, type</p>
+<pre class="hljs"><code><div>export SVGA_VGPU10=0
+</div></code></pre>
+</li>
+<li>
+<p>To check the version of <em>OpenGL</em>, first, install MESA utils. In Terminal,</p>
+<pre class="hljs"><code><div>sudo apt-get install mesa-utils
+</div></code></pre>
+<p>and type</p>
+<pre class="hljs"><code><div>glxinfo | grep &quot;OpenGL version&quot;
+</div></code></pre>
+</li>
+</ul>
+
+</body>
+</html>
